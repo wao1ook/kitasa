@@ -4,7 +4,6 @@ namespace Emanate\Kitasa;
 
 use Emanate\Kitasa\Http\Livewire\Auth\Login;
 use Emanate\Kitasa\Http\Livewire\Auth\RequestPasswordReset;
-use Emanate\Kitasa\Http\Livewire\Auth\ResetPassword;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
@@ -19,9 +18,7 @@ class KitasaPlugin implements Plugin
     {
         $panel
             ->login(Login::class)
-            ->passwordReset()
-            ->requestPasswordReset(RequestPasswordReset::class)
-            ->resetPassword(ResetPassword::class);
+            ->passwordReset(RequestPasswordReset::class);
     }
 
     public function boot(Panel $panel): void

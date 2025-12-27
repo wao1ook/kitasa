@@ -36,9 +36,37 @@ return [
     'otp' => [
         'expiry' => 10, // minutes
         'table' => 'kitasa_otps',
+        'sender' => \Emanate\Kitasa\Services\LogOtpSender::class,
     ],
 ];
 ```
+
+### Customizing OTP Sending
+
+By default, the package logs OTPs to the application log. To use your own implementation (e.g., SMS, WhatsApp), create a class that implements `Emanate\Kitasa\Contracts\OtpSender` and update the `config/kitasa.php`:
+
+```php
+namespace App\Services;
+
+use Emanate\Kitasa\Contracts\OtpSender;
+
+class MyCustomOtpSender implements OtpSender
+{
+    public function send(string $phoneNumber, string $otp): void
+    {
+        // Your logic to send the OTP via SMS or other services
+    }
+}
+```
+
+Then update your config:
+
+```php
+'otp' => [
+    'sender' => \App\Services\MyCustomOtpSender::class,
+],
+```
+
 
 Optionally, you can publish the translations using
 

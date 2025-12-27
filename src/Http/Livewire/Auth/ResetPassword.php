@@ -6,18 +6,20 @@ use Emanate\Kitasa\Services\OtpService;
 use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Http\Responses\Auth\Contracts\PasswordResetResponse;
 use Filament\Pages\Auth\PasswordReset\ResetPassword as BaseResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
+
 use Illuminate\Validation\ValidationException;
 
 class ResetPassword extends BaseResetPassword
 {
     public ?string $phone = null;
 
-    public function mount(): void
+    public function mount(?string $email = null, ?string $token = null): void
     {
-        parent::mount();
+        parent::mount($email, $token);
 
         $this->phone = request()->query('phone');
 
@@ -43,7 +45,7 @@ class ResetPassword extends BaseResetPassword
             ->statePath('data');
     }
 
-    public function resetPassword(): void
+    public function resetPassword(): ?PasswordResetResponse
     {
         $data = $this->form->getState();
 
@@ -64,8 +66,9 @@ class ResetPassword extends BaseResetPassword
 
         $this->resetPasswordStep($user, $data['password']);
 
-        $this->redirect(filament()->getLoginUrl());
+        return app(PasswordResetResponse::class);
     }
+
 
     protected function resetPasswordStep(Authenticatable $user, string $password): void
     {
@@ -83,7 +86,7 @@ class ResetPassword extends BaseResetPassword
         ];
     }
 
-    protected function getResetPasswordFormAction(): Action
+    public function getResetPasswordFormAction(): Action
     {
         return Action::make('resetPassword')
             ->label(__('kitasa::auth.reset_password'))

@@ -6,6 +6,8 @@ return [
     'next' => 'Next',
     'otp' => 'OTP Code',
     'otp_invalid' => 'The provided OTP is invalid or has expired.',
+    'otp_sent' => 'An OTP has been sent to your phone number.',
     'request_otp' => 'Request OTP',
+
     'reset_password' => 'Reset Password',
 ];

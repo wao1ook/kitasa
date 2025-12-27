@@ -2,12 +2,14 @@
 
 namespace Emanate\Kitasa\Http\Livewire\Auth;
 
+use Emanate\Kitasa\Contracts\OtpSender;
 use Emanate\Kitasa\Services\OtpService;
 use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Auth\PasswordReset\RequestPasswordReset as BaseRequestPasswordReset;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
 
 class RequestPasswordReset extends BaseRequestPasswordReset
@@ -45,17 +47,21 @@ class RequestPasswordReset extends BaseRequestPasswordReset
 
         $otp = app(OtpService::class)->generate($data['phone_number']);
 
-        // In a real app, you would send the OTP via SMS here.
-        // For now, we'll just notify the user it was sent (or log it).
+        app(OtpSender::class)->send($data['phone_number'], $otp);
 
         Notification::make()
-            ->title(__('filament-panels::pages/auth/password-reset/request-password-reset.notifications.throttled.title'))
+            ->title(__('kitasa::auth.otp_sent'))
             ->success()
             ->send();
 
-        $this->redirect(route('filament.'.filament()->getId().'.auth.password-reset.reset', [
-            'phone' => $data['phone_number'],
-        ]));
+        $this->redirect(URL::temporarySignedRoute(
+            'kitasa.password-reset.reset',
+            now()->addMinutes(config('kitasa.otp.expiry', 10)),
+            [
+                'phone' => $data['phone_number'],
+            ]
+        ));
+
     }
 
     protected function getFormActions(): array

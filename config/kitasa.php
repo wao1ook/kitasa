@@ -1,11 +1,10 @@
 <?php
 
-// config for Emanate/Kitasa
 return [
     'phone_column' => 'phone_number',
 
     'otp' => [
-        'expiry' => 10, // minutes
+        'expiry' => 10,
         'table' => 'kitasa_otps',
     ],
 ];

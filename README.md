@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/emanate/kitasa/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/emanate/kitasa/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/emanate/kitasa.svg?style=flat-square)](https://packagist.org/packages/emanate/kitasa)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+This package provides a multi-stage phone number authentication system for Filament panels, including OTP-based password resets.
 
 ## Support us
 
@@ -40,21 +40,40 @@ This is the contents of the published config file:
 
 ```php
 return [
+    'phone_column' => 'phone_number',
+
+    'otp' => [
+        'expiry' => 10, // minutes
+        'table' => 'kitasa_otps',
+    ],
 ];
 ```
 
-Optionally, you can publish the views using
+Optionally, you can publish the translations using
 
 ```bash
-php artisan vendor:publish --tag="kitasa-views"
+php artisan vendor:publish --tag="kitasa-translations"
 ```
+
 
 ## Usage
 
+To integrate the phone authentication system into your Filament panel, register the `KitasaPlugin` in your panel configuration:
+
 ```php
-$kitasa = new Emanate\Kitasa();
-echo $kitasa->echoPhrase('Hello, Emanate!');
+use Emanate\Kitasa\KitasaPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        ->plugins([
+            KitasaPlugin::make(),
+        ]);
+}
 ```
+
+This will automatically override the default Filament login, password reset request, and password reset pages to use a phone-based, multi-stage flow.
+
 
 ## Testing
 

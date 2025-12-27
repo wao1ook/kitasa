@@ -18,8 +18,11 @@ class KitasaServiceProvider extends PackageServiceProvider
         $package
             ->name('kitasa')
             ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_kitasa_table')
+            ->hasTranslations()
+            ->hasMigrations([
+                'add_phone_column_to_users_table',
+                'create_kitasa_otps_table',
+            ])
             ->hasCommand(KitasaCommand::class);
     }
 }

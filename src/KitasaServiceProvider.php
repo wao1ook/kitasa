@@ -2,7 +2,7 @@
 
 namespace Emanate\Kitasa;
 
-use Emanate\Kitasa\Commands\KitasaCommand;
+
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -22,7 +22,7 @@ class KitasaServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'add_phone_column_to_users_table',
                 'create_kitasa_otps_table',
-            ])
-            ->hasCommand(KitasaCommand::class);
+            ]);
+
     }
 }

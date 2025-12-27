@@ -3,6 +3,7 @@
 namespace Emanate\Kitasa\Http\Livewire\Auth;
 
 use Filament\Actions\Action;
+use Filament\Forms\Components\Actions\Action as FormAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse;
@@ -46,7 +47,12 @@ class Login extends BaseLogin
             ->autocomplete()
             ->autofocus()
             ->disabled(fn () => $this->isStageTwo)
-            ->dehydrated();
+            ->dehydrated()
+            ->hintAction(
+                fn () => FormAction::make('requestPasswordReset')
+                    ->label(__('filament-panels::pages/auth/login.actions.request_password_reset.label'))
+                    ->url(filament()->getRequestPasswordResetUrl())
+            );
     }
 
     protected function getPasswordFormComponent(): TextInput

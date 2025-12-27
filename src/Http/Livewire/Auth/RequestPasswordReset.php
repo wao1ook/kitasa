@@ -53,7 +53,7 @@ class RequestPasswordReset extends BaseRequestPasswordReset
             ->success()
             ->send();
 
-        $this->redirect(route('filament.admin.auth.password-reset.reset', [
+        $this->redirect(route('filament.'.filament()->getId().'.auth.password-reset.reset', [
             'phone' => $data['phone_number'],
         ]));
     }
